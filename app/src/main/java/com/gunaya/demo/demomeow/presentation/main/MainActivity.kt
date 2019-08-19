@@ -17,7 +17,7 @@ const val NUMBER_OF_COLUMN = 3
 class MainActivity : AppCompatActivity() {
 
     // Instantiate viewModel with Koin
-    private val viewModel: MainViewModel2 by viewModel()
+    val viewModel: MainViewModel2 by viewModel()
     private lateinit var catAdapter: CatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
