@@ -2,9 +2,15 @@ package com.gunaya.demo.demomeow.module
 
 import com.google.gson.GsonBuilder
 import com.gunaya.demo.demomeow.data.remote.CatApi
+import com.gunaya.demo.demomeow.data.remote.CatApi2
 import com.gunaya.demo.demomeow.data.repositories.CatRepository
+import com.gunaya.demo.demomeow.data.repositories.CatRepository2
+import com.gunaya.demo.demomeow.data.repositories.CatRepository2Impl
 import com.gunaya.demo.demomeow.data.repositories.CatRepositoryImpl
 import com.gunaya.demo.demomeow.presentation.main.MainViewModel
+import com.gunaya.demo.demomeow.presentation.main.MainViewModel2
+import com.gunaya.demo.demomeow.service.CatService
+import com.gunaya.demo.demomeow.service.CatServiceImpl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import org.koin.android.viewmodel.dsl.viewModel
@@ -25,11 +31,20 @@ val appModules = module {
             factory = RxJava2CallAdapterFactory.create(),
             baseUrl = CAT_API_BASE_URL
         )
+        createWebService<CatApi2>(
+            okHttpClient = createHttpClient(),
+            factory = RxJava2CallAdapterFactory.create(),
+            baseUrl = CAT_API_BASE_URL
+        )
+
     }
     // Tells Koin how to create an instance of CatRepository
     factory<CatRepository> { CatRepositoryImpl(catApi = get()) }
+    factory<CatRepository2> { CatRepository2Impl(catApi2 = get()) }
+    factory<CatService> { CatServiceImpl(catRepository = get()) }
     // Specific viewModel pattern to tell Koin how to build MainViewModel
     viewModel { MainViewModel(catRepository = get()) }
+    viewModel { MainViewModel2(catService = get()) }
 }
 
 /* Returns a custom OkHttpClient instance with interceptor. Used for building Retrofit service */
